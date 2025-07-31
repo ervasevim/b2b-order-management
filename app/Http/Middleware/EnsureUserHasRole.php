@@ -19,7 +19,7 @@ class EnsureUserHasRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        $user = Auth::user();
+        $user = $request->user();
 
         if (!$user) {
             return $this->unauthorized(
@@ -28,7 +28,7 @@ class EnsureUserHasRole
             );
         }
 
-        if (!$request->user()->hasRole($role)) {
+        if (!($user->role === 'admin' || $user->hasRole($role))) {
             return $this->unauthorized(
                 403,
                 'Forbidden - You do not have access to this resource'

@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Trait\HttpResponse;
-
 class RegisterRequest extends AbstractRequest
 {
-    use HttpResponse;
 
     /**
      * Get the validation rules that apply to the request.
