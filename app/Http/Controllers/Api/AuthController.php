@@ -7,12 +7,15 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\LoginResource;
 use App\Http\Resources\RegisterResource;
+use App\Http\Trait\HttpResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    use HttpResponse;
+
     public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = User::create([
@@ -24,8 +27,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('Access Token')->accessToken;
 
-        return (new RegisterResource($user, $token))
-            ->response()
+        return $this->success(new RegisterResource($user, $token), 'Kayıt işleminiz başarıyla tamamlandı.')
             ->setStatusCode(201);
     }
 
@@ -40,8 +42,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $token = $user->createToken('auth_token')->accessToken;
 
-        return (new LoginResource($user, $token))
-            ->response()
+        return $this->success(new LoginResource($user, $token), 'Giriş başarılı.')
             ->setStatusCode(200);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Http\Trait\HttpResponse;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
@@ -31,23 +32,34 @@ class ProductController extends Controller
     {
         $product = $this->productService->create($request->validated());
 
-        return (new ProductResource($product))
-            ->response()
+        return $this->success(new ProductResource($product), 'Ürün oluşturuldu!')
             ->setStatusCode(201);
     }
 
-    public function update(UpdateRequest $request, Product $product): JsonResponse
-    {
-        $product = $this->productService->update($product, $request->validated());
 
-        return (new ProductResource($product))
-            ->response()
-            ->setStatusCode(201);
+    public function update(UpdateRequest $request, int $id): JsonResponse
+    {
+        try {
+            $product = $this->productService->update($id, $request->validated());
+
+            return $this->success(new ProductResource($product), 'Ürün başarıyla güncellendi!')
+                ->setStatusCode(201);
+        } catch (ModelNotFoundException $e) {
+            return $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
+        } catch (\Throwable $e) {
+            return $this->error([], 500, 'Bir hata oluştu!', $e->getMessage());
+        }
     }
 
-    public function destroy(Product $product): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $this->productService->delete($product);
-        return response()->json(null, 204);
+        try {
+            $this->productService->delete($id);
+        } catch (ModelNotFoundException $e) {
+            $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
+        }
+
+        return $this->success([], 'Ürün başarıyla silindi!')
+            ->setStatusCode(204);
     }
 }

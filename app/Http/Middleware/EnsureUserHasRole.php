@@ -24,14 +24,14 @@ class EnsureUserHasRole
         if (!$user) {
             return $this->unauthorized(
                 401,
-                'Unauthorized'
+                'Yetkisiz erişim!'
             );
         }
 
         if (!($user->role === 'admin' || $user->hasRole($role))) {
             return $this->unauthorized(
                 403,
-                'Forbidden - You do not have access to this resource'
+                ' Erişim engellendi - Bu kaynağa erişim yetkiniz yok!'
             );
         }
 

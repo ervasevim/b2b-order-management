@@ -21,15 +21,19 @@ class ProductService
         return $product;
     }
 
-    public function update(Product $product, array $data): Product
+    public function update(int $id, array $data): Product
     {
+        $product = Product::findOrFail($id);
+
         $product->update($data);
         Cache::forget('products');
         return $product;
     }
 
-    public function delete(Product $product): void
+    public function delete(int $id): void
     {
+        $product = Product::findOrFail($id);
+
         $product->delete();
         Cache::forget('products');
     }

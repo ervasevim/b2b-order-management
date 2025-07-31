@@ -43,9 +43,10 @@ class OrderController extends Controller
 
         try {
             $order = $orderService->createOrder($validated);
-            return response()->json(new OrderResource($order->load('products')), 201);
+            return $this->success(new OrderResource($order->load('products')), 'Sipariş oluşturuldu.')
+                ->setStatusCode(201);
         } catch (\Exception $e) {
-            return $this->error([], 500, 'Order creation failed!', $e->getMessage());
+            return $this->error([], 500, 'Bir hata oluştu!', $e->getMessage());
         }
     }
 
@@ -60,7 +61,7 @@ class OrderController extends Controller
             $order = $this->orderService->findOrderById($id);
 
             if ($user->role !== 'admin' && $order->user_id !== $user->id) {
-                return response()->json(['message' => 'Siparişiniz bulunamadı!'], 403);
+                return $this->error([], 403, 'Siparişiniz bulunamadı.');
             }
 
             return response()->json(new OrderResource($order->load('products')));
