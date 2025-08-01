@@ -26,8 +26,8 @@ All API endpoints and frontend routes use the following base URL: http://localho
 Clone the repository and prepare the environment file:
 
 ```bash
-git clone https://github.com/ervasevim/-b2b-order-management.git
-cd -b2b-order-management.git
+git clone https://github.com/ervasevim/b2b-order-management.git
+cd b2b-order-management.git
 cp .env.example .env
 
 
