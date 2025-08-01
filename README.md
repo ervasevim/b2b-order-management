@@ -89,3 +89,21 @@ php artisan db:seed
 | GET    | /orders/{order} | Get details of a specific order      | Authenticated         |
 
 ---
+
+## 🚀 Default Users (Created via Seeder)
+
+After running the `UserSeeder`, the following users will be automatically created in the database:
+
+### 👑 Admin User
+- **Email:** `admin@b2b.com`
+- **Password:** `123456`
+- **Role:** `admin`
+
+### 👤 Customer Users
+1. **Email:** `customer1@b2b.com`  
+   **Password:** `123456`  
+   **Role:** `customer`
+###
+2. **Email:** `customer2@b2b.com`  
+   **Password:** `123456`  
+   **Role:** `customer`
