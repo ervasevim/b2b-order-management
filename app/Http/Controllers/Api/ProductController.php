@@ -56,7 +56,7 @@ class ProductController extends Controller
         try {
             $this->productService->delete($id);
         } catch (ModelNotFoundException $e) {
-            $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
+            return $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
         }
 
         return $this->success([], 'Ürün başarıyla silindi!')
