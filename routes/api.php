@@ -20,4 +20,3 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->middleware('role:customer');
     Route::get('/orders/{order}', [OrderController::class, 'show']);
 });
-
