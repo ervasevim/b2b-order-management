@@ -108,3 +108,11 @@ After running the `UserSeeder`, the following users will be automatically create
 2. **Email:** `customer2@b2b.com`  
    **Password:** `123456`  
    **Role:** `customer`
+
+
+## API Postman Collection
+
+Postman collection dosyasını aşağıdaki linkten indirip kullanabilirsiniz:
+
+[Postman Collection](postman/B2B-Order-Management.postman_collection.json)
+
