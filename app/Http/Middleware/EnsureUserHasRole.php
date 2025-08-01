@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Http\Trait\HttpResponse;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserHasRole

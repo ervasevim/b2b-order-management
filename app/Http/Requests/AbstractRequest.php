@@ -22,6 +22,10 @@ abstract class AbstractRequest extends FormRequest
         return true;
     }
 
+    /**
+     * @param Validator $validator
+     * @return mixed
+     */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

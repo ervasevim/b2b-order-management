@@ -9,14 +9,27 @@ use App\Http\Resources\LoginResource;
 use App\Http\Resources\RegisterResource;
 use App\Http\Trait\HttpResponse;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * Class AuthController
+ * Handles user authentication operations such as registration and login.
+ *
+ * @package App\Http\Controllers\Api
+ */
 class AuthController extends Controller
 {
     use HttpResponse;
 
-    public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Register a new user and generate an access token.
+     *
+     * @param RegisterRequest $request The validated registration data.
+     * @return JsonResponse A JSON response containing user data and access token.
+     */
+    public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::create([
             'name' => $request->name,
@@ -31,7 +44,13 @@ class AuthController extends Controller
             ->setStatusCode(201);
     }
 
-    public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Authenticate a user and return an access token.
+     *
+     * @param LoginRequest $request The validated login credentials.
+     * @return JsonResponse A JSON response containing user data and access token or error message.
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->validated();
 

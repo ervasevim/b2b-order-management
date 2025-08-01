@@ -7,11 +7,9 @@ use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Http\Trait\HttpResponse;
-use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -21,6 +19,11 @@ class ProductController extends Controller
     {
     }
 
+    /**
+     * Retrieve a list of all products.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $products = $this->productService->getAll();
@@ -28,38 +31,56 @@ class ProductController extends Controller
         return $this->success(ProductResource::collection($products));
     }
 
+    /**
+     * Store a newly created product in storage.
+     *
+     * @param StoreRequest $request Validated request containing product data.
+     * @return JsonResponse JSON response with created product.
+     */
     public function store(StoreRequest $request): JsonResponse
     {
         $product = $this->productService->create($request->validated());
 
-        return $this->success(new ProductResource($product), 'Ürün oluşturuldu!')
+        return $this->success(new ProductResource($product), 'Product created successfully!')
             ->setStatusCode(201);
     }
 
-
+    /**
+     * Update the specified product.
+     *
+     * @param UpdateRequest $request Validated request containing updated product data.
+     * @param int $id The ID of the product to update.
+     * @return JsonResponse JSON response with updated product or error.
+     */
     public function update(UpdateRequest $request, int $id): JsonResponse
     {
         try {
             $product = $this->productService->update($id, $request->validated());
 
-            return $this->success(new ProductResource($product), 'Ürün başarıyla güncellendi!')
+            return $this->success(new ProductResource($product), 'Product updated successfully!')
                 ->setStatusCode(201);
         } catch (ModelNotFoundException $e) {
-            return $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
+            return $this->error([], 404, 'Product not found!', $e->getMessage());
         } catch (\Throwable $e) {
-            return $this->error([], 500, 'Bir hata oluştu!', $e->getMessage());
+            return $this->error([], 500, 'An unexpected error occurred!', $e->getMessage());
         }
     }
 
+    /**
+     * Remove the specified product from storage.
+     *
+     * @param int $id The ID of the product to delete.
+     * @return JsonResponse JSON response indicating success or failure.
+     */
     public function destroy(int $id): JsonResponse
     {
         try {
             $this->productService->delete($id);
         } catch (ModelNotFoundException $e) {
-            return $this->error([], 404, 'Ürün bulunamadı!', $e->getMessage());
+            return $this->error([], 404, 'Product not found!', $e->getMessage());
         }
 
-        return $this->success([], 'Ürün başarıyla silindi!')
+        return $this->success([], 'Product deleted successfully!')
             ->setStatusCode(204);
     }
 }

@@ -54,6 +54,7 @@ Inside the container, run the following commands to create database tables and s
 composer install
 php artisan migrate
 php artisan db:seed
+php artisan migrate --env=testing
 ```
 
 ---

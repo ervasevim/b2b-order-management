@@ -9,22 +9,25 @@ use App\Http\Trait\HttpResponse;
 use App\Services\OrderService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-
-use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     use HttpResponse;
 
+    /**
+     * Create a new controller instance.
+     *
+     * @param OrderService $orderService
+     */
     public function __construct(private readonly OrderService $orderService)
     {
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a list of the authenticated user's orders.
+     *
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -35,25 +38,32 @@ class OrderController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created order in storage.
+     *
+     * @param StoreRequest $request
+     * @param OrderService $orderService
+     * @return JsonResponse
      */
-    public function store(StoreRequest $request, OrderService $orderService)
+    public function store(StoreRequest $request, OrderService $orderService): JsonResponse
     {
         $validated = $request->validated();
 
         try {
             $order = $orderService->createOrder($validated);
-            return $this->success(new OrderResource($order->load('products')), 'Sipariş oluşturuldu.')
+            return $this->success(new OrderResource($order->load('products')), 'Order has been created.')
                 ->setStatusCode(201);
         } catch (\Exception $e) {
-            return $this->error([], 500, 'Bir hata oluştu!', $e->getMessage());
+            return $this->error([], 500, 'An error occurred!', $e->getMessage());
         }
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified order.
+     *
+     * @param string $id
+     * @return JsonResponse
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         $user = Auth::user();
 
@@ -61,12 +71,12 @@ class OrderController extends Controller
             $order = $this->orderService->findOrderById($id);
 
             if ($user->role !== 'admin' && $order->user_id !== $user->id) {
-                return $this->error([], 403, 'Siparişiniz bulunamadı.');
+                return $this->error([], 403, 'Order not found.');
             }
 
             return response()->json(new OrderResource($order->load('products')));
         } catch (ModelNotFoundException) {
-            return $this->error([], 404, 'Siparişiniz bulunamadı!');
+            return $this->error([], 404, 'Order not found!');
         }
     }
 }
