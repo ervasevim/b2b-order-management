@@ -48,13 +48,12 @@ Inside the container, run the following commands to create database tables and s
 
 ```bash
 composer install
-
-php artisan passport:keys
-php artisan passport:client --personal
-
 php artisan migrate
 php artisan db:seed
 php artisan migrate --env=testing
+
+php artisan passport:keys
+php artisan passport:client --personal
 ```
 
 ---
