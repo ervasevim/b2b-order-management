@@ -72,22 +72,22 @@ php artisan migrate --env=testing
 
 ### Products
 
-| Method | Endpoint       | Description                | Access     |
-|--------|----------------|----------------------------|------------|
-| GET    | /products      | Get all products           | Public     |
-| POST   | /products      | Create a new product       | Admin only |
-| PUT    | /products/{id} | Update an existing product | Admin only |
-| DELETE | /products/{id} | Delete a product           | Admin only |
+| Method | Endpoint        | Description                | Access     |
+|--------|-----------------|----------------------------|------------|
+| GET    | /products       | Get all products           | Public     |
+| POST   | /products       | Create a new product       | Admin only |
+| PUT    | /products/{:id} | Update an existing product | Admin only |
+| DELETE | /products/{:id} | Delete a product           | Admin only |
 
 ---
 
 ### Orders
 
-| Method | Endpoint        | Description                          | Access                |
-|--------|-----------------|--------------------------------------|-----------------------|
-| GET    | /orders         | Get orders of the authenticated user | Authorized users only |
-| POST   | /orders         | Place a new order                    | Authorized users only |
-| GET    | /orders/{order} | Get details of a specific order      | Authenticated         |
+| Method | Endpoint      | Description                          | Access                |
+|--------|---------------|--------------------------------------|-----------------------|
+| GET    | /orders       | Get orders of the authenticated user | Authorized users only |
+| POST   | /orders       | Place a new order                    | Authorized users only |
+| GET    | /orders/{:id} | Get details of a specific order      | Authenticated         |
 
 ---
 
