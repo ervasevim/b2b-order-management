@@ -29,10 +29,6 @@ Clone the repository and prepare the environment file:
 git clone https://github.com/ervasevim/b2b-order-management.git
 cd b2b-order-management.git
 cp .env.example .env
-
-
-php artisan passport:keys
-php artisan passport:client --personal
 ```
 
 ### 2. Connect to Docker Container
@@ -52,6 +48,10 @@ Inside the container, run the following commands to create database tables and s
 
 ```bash
 composer install
+
+php artisan passport:keys
+php artisan passport:client --personal
+
 php artisan migrate
 php artisan db:seed
 php artisan migrate --env=testing
