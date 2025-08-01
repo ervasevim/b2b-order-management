@@ -14,7 +14,7 @@ class UpdateRequest extends AbstractRequest
      */
     public function rules(): array
     {
-        $productId = $this->route('product')?->id ?? null;
+        $productId = $this->id;
 
         return [
             'name' => 'sometimes|required|string',

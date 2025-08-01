@@ -10,6 +10,7 @@ use App\Http\Resources\RegisterResource;
 use App\Http\Trait\HttpResponse;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -41,7 +42,7 @@ class AuthController extends Controller
         $token = $user->createToken('Access Token')->accessToken;
 
         return $this->success(new RegisterResource($user, $token), 'Kayıt işleminiz başarıyla tamamlandı.')
-            ->setStatusCode(201);
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -55,13 +56,13 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
+            return response()->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
         }
 
         $user = Auth::user();
         $token = $user->createToken('auth_token')->accessToken;
 
         return $this->success(new LoginResource($user, $token), 'Giriş başarılı.')
-            ->setStatusCode(200);
+            ->setStatusCode(Response::HTTP_OK);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Trait\HttpResponse;
 use App\Services\OrderService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -51,9 +52,9 @@ class OrderController extends Controller
         try {
             $order = $orderService->createOrder($validated);
             return $this->success(new OrderResource($order->load('products')), 'Order has been created.')
-                ->setStatusCode(201);
+                ->setStatusCode(Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return $this->error([], 500, 'An error occurred!', $e->getMessage());
+            return $this->error([], Response::HTTP_INTERNAL_SERVER_ERROR, 'An error occurred!', $e->getMessage());
         }
     }
 
@@ -71,12 +72,12 @@ class OrderController extends Controller
             $order = $this->orderService->findOrderById($id);
 
             if ($user->role !== 'admin' && $order->user_id !== $user->id) {
-                return $this->error([], 403, 'Order not found.');
+                return $this->error([], Response::HTTP_FORBIDDEN, 'Order not found.');
             }
 
             return response()->json(new OrderResource($order->load('products')));
         } catch (ModelNotFoundException) {
-            return $this->error([], 404, 'Order not found!');
+            return $this->error([], Response::HTTP_NOT_FOUND, 'Order not found!');
         }
     }
 }

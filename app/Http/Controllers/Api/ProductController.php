@@ -10,6 +10,7 @@ use App\Http\Trait\HttpResponse;
 use App\Services\ProductService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
@@ -42,7 +43,7 @@ class ProductController extends Controller
         $product = $this->productService->create($request->validated());
 
         return $this->success(new ProductResource($product), 'Product created successfully!')
-            ->setStatusCode(201);
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -58,11 +59,11 @@ class ProductController extends Controller
             $product = $this->productService->update($id, $request->validated());
 
             return $this->success(new ProductResource($product), 'Product updated successfully!')
-                ->setStatusCode(201);
+                ->setStatusCode(Response::HTTP_CREATED);
         } catch (ModelNotFoundException $e) {
-            return $this->error([], 404, 'Product not found!', $e->getMessage());
-        } catch (\Throwable $e) {
-            return $this->error([], 500, 'An unexpected error occurred!', $e->getMessage());
+            return $this->error([], Response::HTTP_NOT_FOUND, 'Product not found!', $e->getMessage());
+        } catch (\Exception $e) {
+            return $this->error([], Response::HTTP_INTERNAL_SERVER_ERROR, 'An unexpected error occurred!', $e->getMessage());
         }
     }
 
@@ -77,7 +78,7 @@ class ProductController extends Controller
         try {
             $this->productService->delete($id);
         } catch (ModelNotFoundException $e) {
-            return $this->error([], 404, 'Product not found!', $e->getMessage());
+            return $this->error([], Response::HTTP_NOT_FOUND, 'Product not found!', $e->getMessage());
         }
 
         return $this->success([], 'Product deleted successfully!')
