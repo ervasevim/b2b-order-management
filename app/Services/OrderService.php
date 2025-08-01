@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    public function getOrdersForUser(User $user)
+    public function getOrdersForUser(User $user): \Illuminate\Database\Eloquent\Collection
     {
         if ($user->role === 'admin') {
             return Order::with('items.product')->get();
