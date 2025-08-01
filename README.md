@@ -112,7 +112,7 @@ After running the `UserSeeder`, the following users will be automatically create
 
 ## API Postman Collection
 
-Postman collection dosyasını aşağıdaki linkten indirip kullanabilirsiniz:
+You can download and use the Postman collection file from the following link:
 
 [Postman Collection](postman/B2B-Order-Management.postman_collection.json)
 
